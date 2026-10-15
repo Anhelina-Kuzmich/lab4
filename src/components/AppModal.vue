@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
+import { watch, ref, nextTick, onUnmounted } from "vue";
 
 interface Props {
   isOpen: boolean;
@@ -12,24 +12,45 @@ const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
-const handleKeyDown = (event: KeyboardEvent) => {
-  if (props.isOpen && event.key === "Escape") {
+const modalContainerRef = ref<HTMLDivElement | null>(null);
+
+const handleGlobalKeyDown = (event: KeyboardEvent) => {
+  if (event.key === "Escape" || event.key === "Esc" || event.keyCode === 27) {
     emit("close");
   }
 };
 
-onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-});
+watch(
+  () => props.isOpen,
+  async (open) => {
+    if (open) {
+      window.addEventListener("keydown", handleGlobalKeyDown, true);
+      await nextTick();
+      if (modalContainerRef.value) {
+        modalContainerRef.value.focus();
+      }
+    } else {
+      window.removeEventListener("keydown", handleGlobalKeyDown, true);
+    }
+  },
+  { immediate: true }
+);
 
 onUnmounted(() => {
-  window.removeEventListener("keydown", handleKeyDown);
+  window.removeEventListener("keydown", handleGlobalKeyDown, true);
 });
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="custom-modal-overlay" @click.self="emit('close')">
+    <div
+      v-if="isOpen"
+      ref="modalContainerRef"
+      class="custom-modal-overlay"
+      tabindex="-1"
+      @keydown.esc="emit('close')"
+      @click.self="emit('close')"
+    >
       <div class="custom-modal-container">
         <div class="custom-modal-header">
           <h5 class="custom-modal-title">{{ title }}</h5>
@@ -60,35 +81,24 @@ onUnmounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99999;
+  outline: none;
 }
 
 .custom-modal-container {
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
   margin: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: modal-appear 0.2s ease-out;
-}
-
-@keyframes modal-appear {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .custom-modal-header {
@@ -96,7 +106,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .custom-modal-title {
@@ -109,7 +119,7 @@ onUnmounted(() => {
 .custom-modal-close {
   background: transparent;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   line-height: 1;
   color: #6c757d;
   cursor: pointer;
@@ -130,7 +140,7 @@ onUnmounted(() => {
   justify-content: flex-end;
   gap: 10px;
   padding: 14px 20px;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid #e9ecef;
   background-color: #f8f9fa;
 }
 </style>

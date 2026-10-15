@@ -98,17 +98,15 @@ const handleSubmit = () => {
 </script>
 
 <template>
-  <div class="custom-card mb-4">
+  <div class="custom-card mb-4 form-card">
     <div class="form-header mb-4">
-      <h5 class="fw-bold mb-1 text-uppercase text-dark tracking-wide">
-        Register Form
-      </h5>
-      <span class="text-secondary small">Please fill in all the fields.</span>
+      <h5 class="form-title">REGISTER FORM</h5>
+      <p class="form-subtitle">Please fill in all the fields.</p>
     </div>
 
     <form @submit.prevent="handleSubmit" @keyup.enter="handleSubmit">
-      <div class="mb-3">
-        <label class="form-label fw-bold small text-dark mb-1">Name</label>
+      <div class="form-field-group">
+        <label class="field-label">Name</label>
         <AppInput
           v-model="name"
           placeholder="Enter user name"
@@ -117,10 +115,8 @@ const handleSubmit = () => {
         />
       </div>
 
-      <div class="mb-3">
-        <label class="form-label fw-bold small text-dark mb-1"
-          >Date of Birth</label
-        >
+      <div class="form-field-group">
+        <label class="field-label">Date of Birth</label>
         <AppInput
           v-model="dateOfBirth"
           type="date"
@@ -130,8 +126,8 @@ const handleSubmit = () => {
         />
       </div>
 
-      <div class="mb-3">
-        <label class="form-label fw-bold small text-dark mb-1">Email</label>
+      <div class="form-field-group">
+        <label class="field-label">Email</label>
         <AppInput
           v-model="email"
           type="email"
@@ -141,10 +137,8 @@ const handleSubmit = () => {
         />
       </div>
 
-      <div class="mb-4">
-        <label class="form-label fw-bold small text-dark mb-1"
-          >Phone number</label
-        >
+      <div class="form-field-group mb-4">
+        <label class="field-label">Phone number</label>
         <AppInput
           v-model="phone"
           placeholder="+380XXXXXXXXX"
@@ -153,15 +147,53 @@ const handleSubmit = () => {
         />
       </div>
 
-      <div class="d-flex justify-content-end">
-        <AppButton type="submit" class="px-4"> Save </AppButton>
+      <div class="form-actions d-flex justify-content-end">
+        <AppButton type="submit" class="save-btn"> Save </AppButton>
       </div>
     </form>
   </div>
 </template>
 
 <style scoped>
-.tracking-wide {
-  letter-spacing: 0.5px;
+.form-card {
+  padding: 32px 36px;
+}
+
+.form-header {
+  margin-bottom: 24px;
+}
+
+.form-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #2b2b2b;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-subtitle {
+  font-size: 13.5px;
+  color: #8c8c8c;
+  margin-bottom: 0;
+}
+
+.form-field-group {
+  margin-bottom: 20px;
+}
+
+.field-label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 8px;
+}
+
+.save-btn {
+  min-width: 90px;
+  padding: 7px 22px;
+  font-size: 14px;
+  font-weight: 500;
 }
 </style>

@@ -17,10 +17,8 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div
-    class="custom-card mb-4 d-flex align-items-center justify-content-between"
-  >
-    <div class="winners-container d-flex align-items-center flex-grow-1 me-3">
+  <div class="custom-card mb-4">
+    <div class="winners-container d-flex align-items-center mb-3">
       <div class="badges-wrapper d-flex flex-wrap gap-2 me-2">
         <WinnerBadge
           v-for="winner in winners"
@@ -33,16 +31,18 @@ const emit = defineEmits<{
         Winners
       </span>
     </div>
-    <AppButton :disabled="!canDrawWinner" @click="emit('draw-winner')">
-      New winner
-    </AppButton>
+    <div>
+      <AppButton :disabled="!canDrawWinner" @click="emit('draw-winner')">
+        New winner
+      </AppButton>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .winners-container {
   border: 1px solid #e1e1e1;
-  min-height: 44px;
+  min-height: 42px;
   padding: 6px 12px;
   border-radius: 4px;
   background-color: #ffffff;
@@ -50,6 +50,6 @@ const emit = defineEmits<{
 
 .placeholder-text {
   color: #8c8c8c;
-  font-size: 15px;
+  font-size: 14px;
 }
 </style>
